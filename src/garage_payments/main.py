@@ -84,7 +84,7 @@ if __name__ == "__main__":
     ]
 
     # Creation directory for result
-    output_dir = "result"
+    output_dir = os.path.join(os.getenv("HOME_DIR"), "result")
     os.makedirs(output_dir, exist_ok=True)
 
     output_path = os.path.join(output_dir, "payment_status_report.xlsx")
