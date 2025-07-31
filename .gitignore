@@ -7,6 +7,6 @@
 *.xlsx
 *.xml
 
-garage_payments/.env
+.env
 .venv
 .idea
