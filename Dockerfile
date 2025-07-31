@@ -1,20 +1,21 @@
-# Use official Python 3.10 slim image as base
+# Использовать образ Python3.10
 FROM python:3.10
 
-# Set working directory
+# Установить директорию проекта в контейнере
 WORKDIR /app
 
-# Copy all files to the working directory
+# Скопировать все файлы в контейнер
 COPY . .
 
+# Установить переменную окружения PYTHONPATH=/app в контейнере
 ENV PYTHONPATH=/app
 
-# Install Python dependencies (assuming requirements.txt exists)
+# Установить зависимости из файла requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Create .env file with HOME_DIR
+# Создать .env файл в HOME_DIR
 ARG HOME_DIR=/app
 RUN echo "HOME_DIR=${HOME_DIR}" > .env
 
-# Command to run the application (replace main.py with actual entry point)
+# Команда для запуска скрипта в контейнере
 CMD ["python", "src/garage_payments/main.py"]
