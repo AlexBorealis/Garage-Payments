@@ -1,8 +1,8 @@
 from datetime import datetime, timezone
-from dateutil.relativedelta import relativedelta
-from pytz import timezone
 
-from pandas import Series, to_datetime, DataFrame, isna, Timedelta
+from dateutil.relativedelta import relativedelta
+from pandas import Series, to_datetime, DataFrame
+from pytz import timezone
 
 
 def get_number_column(object: DataFrame, pattern: str) -> int | None:
