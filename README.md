@@ -25,7 +25,7 @@ PYTHONPATH=HOME_DIR python3 src/garage_payments/main.py
 podman build -t garage-payments:latest .
 ```
 
-**Запуск образа**
+**Запуск контейнера**
 ```
 podman run --rm -it \
     -v $(pwd)/data:/app/data \
@@ -34,8 +34,20 @@ podman run --rm -it \
 ```
 
 ## ***Запуск с помощью Makefile***
+`make build` сборка образа
 
-Техническое задание на автоматизацию отслеживания оплат аренды гаражей и уведомления о просрочках
+`make run` запуск контейнера
+
+`make clean-containers` остановка и удаление контейнеров
+
+`make clean-images` Удаление образа
+
+`make clean` Полная очистка
+
+`make local` Локальный запуск
+
+
+# Техническое задание на автоматизацию отслеживания оплат аренды гаражей и уведомления о просрочках
 
 Общие требования:
 
