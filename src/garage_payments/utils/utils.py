@@ -42,7 +42,12 @@ def tz(
     :param format: Формат даты
     :return: Столбец DataFrame в формате datetime
     """
-    return to_datetime(object, format=format).dt.tz_localize(old).dt.tz_convert(new)
+    return (
+        to_datetime(object, format=format)
+        .dt.tz_localize(old)
+        .dt.tz_convert(new)
+        .dt.tz_localize(None)
+    )
 
 
 def to_float(object, replacements: list[tuple[str, str]]) -> DataFrame:

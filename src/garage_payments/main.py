@@ -22,9 +22,9 @@ if __name__ == "__main__":
         joined_table, current_datetime, offset=0
     )
 
-    joined_table["delta"] = joined_table["payment_datetime"] - joined_table[
-        "last_payment_datetime"
-    ].dt.tz_localize(None)
+    joined_table["delta"] = (
+        joined_table["payment_datetime"] - joined_table["last_payment_datetime"]
+    )
 
     # Creation status column
     joined_table.loc[
@@ -66,16 +66,19 @@ if __name__ == "__main__":
             "storage_num",
             "previous_payment_datetime",
             "payment_datetime",
+            "last_payment_datetime",
             "delta",
             "amount",
             "payment_status",
         ]
     ]
+
     result.columns = [
         "Название гаража",
         "Дата оплаты (предыдущая)",
-        "Дата оплаты (ожидаемая)",
-        "Интервал времени между ожидаемой датой и последней оплатой, дней",
+        "Дата оплаты (будущая)",
+        "Дата оплаты (фактическая)",
+        "Интервал времени между будущей датой и последней оплатой, дней",
         "Сумма оплаты, руб",
         "Статус",
     ]
