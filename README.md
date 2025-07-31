@@ -1,8 +1,25 @@
 # Garage-Payments
 
-***Для запуска необходимо создать файл .env в /Garage-Payments и записать в него название домашней директории***
+***Для запуска сервиса необходимо создать файл .env в /Garage-Payments и записать в него название домашней директории***
 
-**HOME_DIR=/path/Garage-Payments**
+```
+HOME_DIR=/path/Garage-Payments
+```
+
+***Для запуска с помощью podman***
+
+**Для сборки образа:**
+```
+podman build -t garage-payments:latest .
+```
+
+**Для запуска образа**
+```
+podman run --rm -it \
+    -v $(pwd)/data:/app/data \
+    -v $(pwd)/output:/app/result \
+    garage-payments:latest
+```
 
 Техническое задание на автоматизацию отслеживания оплат аренды гаражей и уведомления о просрочках
 
