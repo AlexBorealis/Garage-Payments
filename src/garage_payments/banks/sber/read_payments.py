@@ -34,10 +34,10 @@ payments.date = payments.date.apply(
     else None
 )
 
-payments["current_payment_datetime"] = tz(
+payments["last_payment_datetime"] = tz(
     payments.date + " " + payments.time, old="Europe/Moscow", new="Asia/Novosibirsk"
 )
 
 payments["amount"] = to_float(payments["amount"], [(",", "."), (" ", ""), ("+", "")])
 
-payments = payments.loc[payments.amount.notna(), ["current_payment_datetime", "amount"]]
+payments = payments.loc[payments.amount.notna(), ["last_payment_datetime", "amount"]]

@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
 from pytz import timezone
 
-from pandas import Series, to_datetime, DataFrame
+from pandas import Series, to_datetime, DataFrame, isna, Timedelta
 
 
 def get_number_column(object: DataFrame, pattern: str) -> int | None:
@@ -34,6 +34,7 @@ def tz(
     object: DataFrame, old: str, new: str, format: str = "%d.%m.%Y %H:%M"
 ) -> DataFrame:
     """
+    Задает нужную временную зону в дате платежа
 
     :param object: pandas DataFrame
     :param old: Название временной зоны (начальное)
@@ -58,14 +59,26 @@ def to_float(object, replacements: list[tuple[str, str]]) -> DataFrame:
 
 
 def next_payment_datetime(
-    object: DataFrame, current_datetime: datetime, zone: str = "Asia/Novosibirsk"
+    object: DataFrame,
+    current_datetime: datetime,
+    offset: int = 1,
+    zone: str = "Asia/Novosibirsk",
 ) -> Series:
+    """
+    Вычисляет дату платежа в любой из n периодов
+
+    :param object:
+    :param current_datetime:
+    :param offset:
+    :param zone:
+    :return:
+    """
     current_datetime = current_datetime.astimezone(timezone(zone=zone))
 
     month_delta = (
         (current_datetime.year - object.initial_datetime.dt.year) * 12
         + (current_datetime.month - object.initial_datetime.dt.month)
-        + 1
+        + offset
     )
 
     return Series(
