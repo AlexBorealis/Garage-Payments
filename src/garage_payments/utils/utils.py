@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from dateutil.relativedelta import relativedelta
-from pandas import Series, to_datetime, DataFrame
+from pandas import Series, to_datetime, DataFrame, notna
 from pytz import timezone
 
 
@@ -50,17 +50,30 @@ def tz(
     )
 
 
-def to_float(object, replacements: list[tuple[str, str]]) -> DataFrame:
+def to_float(object: Series, replacements: list[tuple[str, str]]) -> DataFrame:
     """
+    Преобразовывает все значения в столбце сумм в тип float
 
     :param object: pandas DataFrame
     :param replacements: Список кортежей с паттернами для замены
     :return: Столбец DataFrame в формате float
     """
-    result = object.str.extract(r"([+-]?\d+\s?\d*,\d+|\d+\s?\d*,\d+)")[0]
-    for old, new in replacements:
-        result = result.str.replace(old, new)
-    return result.astype(float)
+    def process_value(x):
+        if isinstance(x, (int, float)):
+            return float(x)
+        elif isinstance(x, str):
+            result = Series([x]).str.extract(r"([+-]?\d+\s?\d*,\d+|\d+\s?\d*,\d+)").iloc[0, 0]
+            if notna(result):
+                for old, new in replacements:
+                    result = result.replace(old, new)
+                try:
+                    return float(result)
+                except (ValueError, TypeError):
+                    return None
+            return None
+        return None
+
+    return object.apply(process_value)
 
 
 def next_payment_datetime(
