@@ -58,11 +58,16 @@ def to_float(object: Series, replacements: list[tuple[str, str]]) -> DataFrame:
     :param replacements: Список кортежей с паттернами для замены
     :return: Столбец DataFrame в формате float
     """
+
     def process_value(x):
         if isinstance(x, (int, float)):
             return float(x)
         elif isinstance(x, str):
-            result = Series([x]).str.extract(r"([+-]?\d+\s?\d*,\d+|\d+\s?\d*,\d+)").iloc[0, 0]
+            result = (
+                Series([x])
+                .str.extract(r"([+-]?\d+\s?\d*,\d+|\d+\s?\d*,\d+)")
+                .iloc[0, 0]
+            )
             if notna(result):
                 for old, new in replacements:
                     result = result.replace(old, new)

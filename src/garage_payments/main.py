@@ -32,7 +32,7 @@ if __name__ == "__main__":
             joined_table["delta"]
             > (
                 joined_table["payment_datetime"]
-                - next_payment_datetime(joined_table, current_datetime, offset=0)
+                - joined_table["previous_payment_datetime"]
                 + timedelta(days=3)
             )
         )
@@ -43,19 +43,26 @@ if __name__ == "__main__":
     joined_table.loc[
         joined_table["delta"]
         < (
-            joined_table["payment_datetime"] - joined_table["previous_payment_datetime"]
+            joined_table["payment_datetime"]
+            - joined_table["previous_payment_datetime"]
+            + timedelta(days=3)
         ),
         "payment_status",
     ] = "Срок не подошел"
 
     joined_table.loc[
         (
-            joined_table["payment_datetime"].dt.date
-            == joined_table["last_payment_datetime"].dt.date
+            (
+                joined_table["payment_datetime"].dt.date
+                == joined_table["last_payment_datetime"].dt.date
+            )
+            | (
+                joined_table["previous_payment_datetime"].dt.date
+                == joined_table["last_payment_datetime"].dt.date
+            )
         )
-        | (
-            next_payment_datetime(joined_table, current_datetime, offset=0).dt.date
-            == joined_table["last_payment_datetime"].dt.date
+        & (
+            joined_table["previous_payment_datetime"].dt.date == current_datetime.date()
         ),
         "payment_status",
     ] = "Получен"
